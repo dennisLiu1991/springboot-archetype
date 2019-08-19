@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <properties>
+        <Property name = "prefix">/Users/cdliuchao9/log</Property>
+        <Property name = "layout">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+    </properties>
+
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${layout}"/>
+        </Console>
+
+        <RollingFile name="error" fileName="${prefix}/error.log"
+                     filePattern="${prefix}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log.gz"
+                     Append="true">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20M"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="min" max="16"/>
+        </RollingFile>
+
+        <RollingFile name="log" fileName="${prefix}/info.log"
+                     filePattern="${prefix}/$${date:yyyy-MM}/log-%d{yyyy-MM-dd}-%i.log.gz"
+                     Append="true">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20M"/>
+            </Policies>
+            <DefaultRolloverStrategy fileIndex="min" max="16"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="error" />
+            <AppenderRef ref="log" />
+        </Root>
+    </Loggers>
+</Configuration>
